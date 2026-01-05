@@ -31,7 +31,9 @@
         <!-- REGISTER -->
         <activity
             android:name=".activities.RegisterActivity"
-            android:exported="false" />
+            android:exported="false">
+
+        </activity>
 
     </application>
 
