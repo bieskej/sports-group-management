@@ -1,4 +1,4 @@
-package ba.sum.fsre.sportska_grupa;
+package ba.sum.fsre.sportska_grupa.activities;
 
 import android.os.Bundle;
 
@@ -8,8 +8,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity {
+import ba.sum.fsre.sportska_grupa.R;
 
+public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
