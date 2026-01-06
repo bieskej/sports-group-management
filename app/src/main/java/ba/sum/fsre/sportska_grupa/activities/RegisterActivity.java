@@ -48,7 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
     private void setupListeners() {
         registerBtn.setOnClickListener(v -> registerUser());
 
-        backToLoginBtn.setOnClickListener(v -> finish());
+        backToLoginBtn.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void registerUser() {
@@ -65,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         RegisterRequest request = new RegisterRequest(email, password, username);
 
-        RetrofitClient.getInstance()
+        RetrofitClient.getInstance(this)
                 .getApi()
                 .signup(request)
                 .enqueue(new ApiCallback<AuthResponse>() {

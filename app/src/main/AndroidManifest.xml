@@ -28,6 +28,10 @@
             android:name=".activities.LoginActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.DashboardActivity"
+            android:exported="false" />
+
         <!-- REGISTER -->
         <activity
             android:name=".activities.RegisterActivity"
