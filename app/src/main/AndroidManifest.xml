@@ -32,6 +32,10 @@
             android:name=".activities.DashboardActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.CreateTrainingActivity"
+            android:exported="false" />
+
         <!-- REGISTER -->
         <activity
             android:name=".activities.RegisterActivity"

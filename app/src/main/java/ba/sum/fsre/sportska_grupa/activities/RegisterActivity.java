@@ -143,11 +143,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void handleRegisterSuccess(AuthResponse response) {
         authManager.saveToken(response.getAccessToken());
-        authManager.saveEmail(response.getUser().getEmail());
+        if (response.getUser() != null) {
+            authManager.saveEmail(response.getUser().getEmail());
+            authManager.saveUserId(response.getUser().getId());
+        }
 
         Toast.makeText(this, "Registracija uspješna!", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, DashboardActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
