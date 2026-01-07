@@ -13,23 +13,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static RetrofitClient instance;
     private final SupabaseAPI api;
+    private final Context appContext;
 
     private RetrofitClient(Context context) {
+        this.appContext = context.getApplicationContext();
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        Context appContext = context.getApplicationContext();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     Request.Builder builder = original.newBuilder()
-                            .addHeader("apikey", Constants.ANON_KEY);
+                            .addHeader("apikey", Constants.ANON_KEY)
+                            .addHeader("Content-Type", "application/json");
 
                     // Dodaj Authorization header ako postoji spremljeni token
                     AuthManager authManager = new AuthManager(appContext);
                     String token = authManager.getToken();
-                    if (token != null) {
+                    if (token != null && !token.isEmpty()) {
                         builder.addHeader("Authorization", "Bearer " + token);
                     }
 
