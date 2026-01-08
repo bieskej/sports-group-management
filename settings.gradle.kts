@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Sportska_grupa"
 include(":app")
-
