@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         authManager.saveToken(response.getAccessToken());
         if (response.getUser() != null) {
             authManager.saveEmail(response.getUser().getEmail());
+            authManager.saveUserId(response.getUser().getId());
         }
 
         Toast.makeText(this, "Prijava uspješna!", Toast.LENGTH_SHORT).show();

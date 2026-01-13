@@ -37,4 +37,12 @@ public class AuthManager {
     public void logout() {
         prefs.edit().clear().apply();
     }
+
+    public void saveUserId(String userId) {
+        prefs.edit().putString("user_id", userId).apply();
+    }
+
+    public String getUserId() {
+        return prefs.getString("user_id", null);
+    }
 }
