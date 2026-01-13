@@ -132,7 +132,8 @@ public class DashboardActivity extends AppCompatActivity {
             public void onError(String errorMessage) {
                 setLoading(false);
                 Toast.makeText(DashboardActivity.this, "Greška pri kreiranju: " + errorMessage, Toast.LENGTH_SHORT).show();
-            }
+            }git commit -m "Training: create training (CRUD - CREATE)"
+
         });
     }
 
