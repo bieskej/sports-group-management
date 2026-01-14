@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.DELETE;
 
 public interface SupabaseAPI {
 
@@ -27,5 +28,8 @@ public interface SupabaseAPI {
     @Headers({"Content-Type: application/json", "Prefer: return=representation"})
     @POST("rest/v1/trainings")
     Call<List<Training>> createTraining(@Body Training training);
+
+    @DELETE("rest/v1/trainings")
+    Call<Void> deleteTraining(@retrofit2.http.Query("id") String id);
 
 }

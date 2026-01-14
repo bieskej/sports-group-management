@@ -55,7 +55,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TrainingAdapter(new ArrayList<>());
+        adapter = new TrainingAdapter(new ArrayList<>(), this::showDeleteConfirmationDialog);
         recyclerView.setAdapter(adapter);
     }
 
@@ -77,7 +77,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onError(String errorMessage) {
                 setLoading(false);
-                Toast.makeText(DashboardActivity.this, "Greška pri učitavanju: " + errorMessage, Toast.LENGTH_SHORT).show();
+                handleApiError(errorMessage);
             }
         });
     }
@@ -131,10 +131,55 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onError(String errorMessage) {
                 setLoading(false);
-                Toast.makeText(DashboardActivity.this, "Greška pri kreiranju: " + errorMessage, Toast.LENGTH_SHORT).show();
-            }git commit -m "Training: create training (CRUD - CREATE)"
+                handleApiError(errorMessage);
+            }
 
         });
+    }
+
+    private void showDeleteConfirmationDialog(Training training) {
+        new AlertDialog.Builder(this)
+                .setTitle("Brisanje treninga")
+                .setMessage("Jeste li sigurni da želite obrisati trening: " + training.getTitle() + "?")
+                .setPositiveButton("Obriši", (dialog, which) -> deleteTraining(training))
+                .setNegativeButton("Odustani", null)
+                .show();
+    }
+
+    private void deleteTraining(Training training) {
+        setLoading(true);
+        String idQuery = "eq." + training.getId();
+        RetrofitClient.getInstance(this).getApi().deleteTraining(idQuery).enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
+                setLoading(false);
+                if (response.isSuccessful()) {
+                    Toast.makeText(DashboardActivity.this, "Trening obrisan", Toast.LENGTH_SHORT).show();
+                    loadTrainings();
+                } else {
+                    handleApiError("Greška: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<Void> call, Throwable t) {
+                setLoading(false);
+                Toast.makeText(DashboardActivity.this, "Greška mreže: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void handleApiError(String errorMessage) {
+        if (errorMessage.contains("401")) {
+            Toast.makeText(this, "Sesija je istekla. Molimo prijavite se ponovno.", Toast.LENGTH_LONG).show();
+            authManager.logout();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setLoading(boolean isLoading) {
