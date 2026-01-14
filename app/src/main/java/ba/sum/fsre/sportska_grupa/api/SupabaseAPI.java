@@ -1,5 +1,6 @@
 package ba.sum.fsre.sportska_grupa.api;
 
+import ba.sum.fsre.sportska_grupa.models.Profile;
 import ba.sum.fsre.sportska_grupa.models.Training;
 import ba.sum.fsre.sportska_grupa.models.request.RegisterRequest;
 import ba.sum.fsre.sportska_grupa.models.request.LoginRequest;
@@ -11,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.DELETE;
+import retrofit2.http.Query;
 
 public interface SupabaseAPI {
 
@@ -21,6 +23,12 @@ public interface SupabaseAPI {
     @Headers("Content-Type: application/json")
     @POST("auth/v1/token?grant_type=password")
     Call<AuthResponse> login(@Body LoginRequest request);
+
+    @GET("rest/v1/profiles")
+    Call<List<Profile>> getMyProfile(
+            @Query("id") String userId,
+            @Query("select") String select
+    );
 
     @GET("rest/v1/trainings?select=*&order=training_date.desc")
     Call<List<Training>> getTrainings();
