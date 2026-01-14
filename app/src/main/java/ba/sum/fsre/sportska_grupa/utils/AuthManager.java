@@ -8,6 +8,8 @@ public class AuthManager {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_EMAIL = "email";
 
+    private static final String KEY_ROLE = "role";
+
     private SharedPreferences prefs;
 
     public AuthManager(Context context) {
@@ -44,5 +46,17 @@ public class AuthManager {
 
     public String getUserId() {
         return prefs.getString("user_id", null);
+    }
+
+    public void saveRole(String role) {
+        prefs.edit().putString(KEY_ROLE, role).apply();
+    }
+
+    public String getRole() {
+        return prefs.getString(KEY_ROLE, null);
+    }
+
+    public boolean isTrainer() {
+        return "trainer".equals(getRole());
     }
 }

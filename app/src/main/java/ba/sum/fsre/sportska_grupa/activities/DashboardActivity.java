@@ -42,6 +42,7 @@ public class DashboardActivity extends AppCompatActivity {
         authManager = new AuthManager(this);
 
         initViews();
+        applyRolePermissions();
         setupRecyclerView();
         setupListeners();
         loadTrainings();
@@ -52,6 +53,13 @@ public class DashboardActivity extends AppCompatActivity {
         fabAddTraining = findViewById(R.id.fabAddTraining);
         progressBar = findViewById(R.id.dashboardProgressBar);
     }
+
+    private void applyRolePermissions() {
+        if (!authManager.isTrainer()) {
+            fabAddTraining.setVisibility(View.GONE);
+        }
+    }
+
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -138,6 +146,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void showDeleteConfirmationDialog(Training training) {
+        if (!authManager.isTrainer()) {
+            Toast.makeText(this, "Nemate ovlasti za brisanje treninga", Toast.LENGTH_SHORT).show();
+            return;
+        }
         new AlertDialog.Builder(this)
                 .setTitle("Brisanje treninga")
                 .setMessage("Jeste li sigurni da želite obrisati trening: " + training.getTitle() + "?")

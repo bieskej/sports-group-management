@@ -11,9 +11,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 import ba.sum.fsre.sportska_grupa.R;
 import ba.sum.fsre.sportska_grupa.api.ApiCallback;
 import ba.sum.fsre.sportska_grupa.api.RetrofitClient;
+import ba.sum.fsre.sportska_grupa.models.Profile;
 import ba.sum.fsre.sportska_grupa.models.request.LoginRequest;
 import ba.sum.fsre.sportska_grupa.models.response.AuthResponse;
 import ba.sum.fsre.sportska_grupa.utils.AuthManager;
@@ -113,8 +116,11 @@ public class LoginActivity extends AppCompatActivity {
     private void handleLoginSuccess(AuthResponse response) {
         authManager.saveToken(response.getAccessToken());
         if (response.getUser() != null) {
+            String userId = response.getUser().getId();
             authManager.saveEmail(response.getUser().getEmail());
             authManager.saveUserId(response.getUser().getId());
+
+            fetchUserRole(userId);
         }
 
         Toast.makeText(this, "Prijava uspješna!", Toast.LENGTH_SHORT).show();
@@ -131,4 +137,35 @@ public class LoginActivity extends AppCompatActivity {
         emailInput.setEnabled(!isLoading);
         passwordInput.setEnabled(!isLoading);
     }
+
+    private void fetchUserRole(String userId) {
+        RetrofitClient.getInstance(this)
+                .getApi()
+                .getMyProfile("eq." + userId, "role")
+                .enqueue(new ApiCallback<List<Profile>>() {
+                    @Override
+                    public void onSuccess(List<Profile> profiles) {
+                        if (!profiles.isEmpty()) {
+                            authManager.saveRole(profiles.get(0).getRole());
+                        }
+
+                        goToDashboard();
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Toast.makeText(LoginActivity.this,
+                                "Greška pri dohvaćanju uloge",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void goToDashboard() {
+        Intent intent = new Intent(this, DashboardActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
 }
