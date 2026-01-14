@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import androidx.appcompat.widget.Toolbar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -32,6 +33,7 @@ public class DashboardActivity extends AppCompatActivity {
     private TrainingAdapter adapter;
     private FloatingActionButton fabAddTraining;
     private ProgressBar progressBar;
+    private Toolbar toolbar;
     private AuthManager authManager;
 
     @Override
@@ -52,6 +54,18 @@ public class DashboardActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         fabAddTraining = findViewById(R.id.fabAddTraining);
         progressBar = findViewById(R.id.dashboardProgressBar);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent); // vraća nazad na LoginActivity
+        });
     }
 
     private void applyRolePermissions() {
