@@ -28,10 +28,15 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.Traini
     private OnTrainingDeleteListener deleteListener;
     private OnTrainingEditListener editListener;
 
+    private boolean isTrainer;
+
+
     public TrainingAdapter(List<Training> trainingList,
+                           boolean isTrainer,
                            OnTrainingDeleteListener deleteListener,
                            OnTrainingEditListener editListener) {
         this.trainingList = trainingList;
+        this.isTrainer = isTrainer;
         this.deleteListener = deleteListener;
         this.editListener = editListener;
     }
@@ -78,6 +83,15 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.Traini
 
 
         holder.itemView.setOnClickListener(null);
+
+        if (!isTrainer) {
+            holder.btnEdit.setVisibility(View.GONE);
+            holder.btnDelete.setVisibility(View.GONE);
+        } else {
+            holder.btnEdit.setVisibility(View.VISIBLE);
+            holder.btnDelete.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override

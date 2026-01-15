@@ -4,7 +4,7 @@ import java.util.List;
 
 import ba.sum.fsre.sportska_grupa.models.Profile;
 import ba.sum.fsre.sportska_grupa.models.Training;
-import ba.sum.fsre.sportska_grupa.models.TrainingUpdateRequest;
+import ba.sum.fsre.sportska_grupa.models.request.TrainingUpdateRequest;
 import ba.sum.fsre.sportska_grupa.models.request.LoginRequest;
 import ba.sum.fsre.sportska_grupa.models.request.RegisterRequest;
 import ba.sum.fsre.sportska_grupa.models.response.AuthResponse;

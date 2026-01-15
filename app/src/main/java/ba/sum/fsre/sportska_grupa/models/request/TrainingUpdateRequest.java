@@ -1,4 +1,4 @@
-package ba.sum.fsre.sportska_grupa.models;
+package ba.sum.fsre.sportska_grupa.models.request;
 
 import com.google.gson.annotations.SerializedName;
 
