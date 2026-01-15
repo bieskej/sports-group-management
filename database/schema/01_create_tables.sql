@@ -18,3 +18,16 @@ CREATE TABLE public.attendance (
   CONSTRAINT attendance_training_id_fkey
     FOREIGN KEY (training_id) REFERENCES public.trainings(id)
 );
+
+create table public.profiles (
+  id uuid not null,
+  role text not null default 'player'::text,
+  created_at timestamp with time zone null default timezone ('utc'::text, now()),
+  constraint profiles_pkey primary key (id),
+  constraint profiles_id_fkey foreign KEY (id) references auth.users (id) on delete CASCADE,
+  constraint profiles_role_check check (
+    (
+      role = any (array['player'::text, 'trainer'::text])
+    )
+  )
+) TABLESPACE pg_default;
