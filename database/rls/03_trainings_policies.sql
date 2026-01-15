@@ -24,3 +24,23 @@ TO authenticated
 USING (
   auth.uid() = created_by
 );
+
+alter policy "Trainers can delete trainings"
+on "public"."trainings"
+to authenticated
+using (
+  (EXISTS ( SELECT 1
+   FROM profiles
+  WHERE ((profiles.id = auth.uid()) AND (profiles.role = 'trainer'::text))))
+);
+
+alter policy "Trainers can insert trainings"
+on "public"."trainings"
+to authenticated
+using (
+) with check (
+  (EXISTS ( SELECT 1
+   FROM profiles
+  WHERE ((profiles.id = auth.uid()) AND (profiles.role = 'trainer'::text))))
+
+);
