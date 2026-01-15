@@ -2,30 +2,26 @@ package ba.sum.fsre.sportska_grupa.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ba.sum.fsre.sportska_grupa.utils.AuthManager;
+import ba.sum.fsre.sportska_grupa.R;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        // Provjera postoji li već spremljeni token (korisnik je već prijavljen)
-        AuthManager authManager = new AuthManager(this);
+        Button btnLogin = findViewById(R.id.btnLogin);
+        Button btnRegister = findViewById(R.id.goToRegisterBtn);
 
-        Intent intent;
-        if (authManager.isLoggedIn()) {
-            intent = new Intent(this, DashboardActivity.class);
-        } else {
-            intent = new Intent(this, LoginActivity.class);
-        }
+        btnLogin.setOnClickListener(v ->
+                startActivity(new Intent(this, LoginActivity.class)));
 
-        // Očisti back stack kako bi se preskočio login kod već prijavljenog korisnika
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        btnRegister.setOnClickListener(v ->
+                startActivity(new Intent(this, RegisterActivity.class)));
     }
 }
-

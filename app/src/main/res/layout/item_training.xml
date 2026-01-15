@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,15 +29,17 @@
                 android:text="Training Title"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black" />
+                android:textColor="#111827"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
             <!-- ✏️ EDIT -->
             <ImageButton
                 android:id="@+id/btnEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@android:drawable/ic_menu_edit"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/icon_button_bg"
                 android:padding="8dp"
                 android:contentDescription="Edit"
                 android:clickable="true"
@@ -44,10 +48,11 @@
             <!-- 🗑 DELETE -->
             <ImageButton
                 android:id="@+id/btnDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
                 android:src="@android:drawable/ic_menu_delete"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/icon_button_bg"
                 android:padding="8dp"
                 android:contentDescription="Delete"
                 android:clickable="true"
@@ -58,16 +63,19 @@
             android:id="@+id/trainingDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date: 2023-10-27"
-            android:layout_marginTop="4dp"
-            android:textColor="@android:color/darker_gray" />
+            android:text="Datum: 2026-01-15"
+            android:layout_marginTop="8dp"
+            android:textColor="#6B7280"
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/trainingDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description goes here..."
-            android:layout_marginTop="8dp"
+            android:text="Opis treninga..."
+            android:layout_marginTop="10dp"
+            android:textColor="#374151"
+            android:textSize="14sp"
             android:maxLines="3"
             android:ellipsize="end" />
 
