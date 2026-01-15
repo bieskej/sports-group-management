@@ -4,13 +4,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ImageButton;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import ba.sum.fsre.sportska_grupa.R;
 import ba.sum.fsre.sportska_grupa.models.Training;
-import java.util.List;
 
-import android.widget.ImageButton;
+import java.util.List;
 
 public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.TrainingViewHolder> {
 
@@ -18,12 +20,20 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.Traini
         void onDelete(Training training);
     }
 
+    public interface OnTrainingEditListener {
+        void onEdit(Training training);
+    }
+
     private List<Training> trainingList;
     private OnTrainingDeleteListener deleteListener;
+    private OnTrainingEditListener editListener;
 
-    public TrainingAdapter(List<Training> trainingList, OnTrainingDeleteListener deleteListener) {
+    public TrainingAdapter(List<Training> trainingList,
+                           OnTrainingDeleteListener deleteListener,
+                           OnTrainingEditListener editListener) {
         this.trainingList = trainingList;
         this.deleteListener = deleteListener;
+        this.editListener = editListener;
     }
 
     public void updateData(List<Training> newTrainings) {
@@ -41,31 +51,43 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.Traini
     @Override
     public void onBindViewHolder(@NonNull TrainingViewHolder holder, int position) {
         Training training = trainingList.get(position);
+
         holder.title.setText(training.getTitle());
         holder.date.setText("Datum: " + training.getTrainingDate());
-        
+
         if (training.getDescription() != null && !training.getDescription().isEmpty()) {
             holder.description.setText(training.getDescription());
             holder.description.setVisibility(View.VISIBLE);
         } else {
             holder.description.setVisibility(View.GONE);
         }
-        
+
+
+        holder.btnEdit.setOnClickListener(v -> {
+            if (editListener != null) {
+                editListener.onEdit(training);
+            }
+        });
+
+
         holder.btnDelete.setOnClickListener(v -> {
             if (deleteListener != null) {
                 deleteListener.onDelete(training);
             }
         });
+
+
+        holder.itemView.setOnClickListener(null);
     }
 
     @Override
     public int getItemCount() {
-        return trainingList.size();
+        return trainingList == null ? 0 : trainingList.size();
     }
 
     public static class TrainingViewHolder extends RecyclerView.ViewHolder {
         TextView title, date, description;
-        ImageButton btnDelete;
+        ImageButton btnDelete, btnEdit;
 
         public TrainingViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,6 +95,7 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.Traini
             date = itemView.findViewById(R.id.trainingDate);
             description = itemView.findViewById(R.id.trainingDescription);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
         }
     }
 }

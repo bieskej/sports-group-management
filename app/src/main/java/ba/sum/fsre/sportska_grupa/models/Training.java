@@ -4,19 +4,21 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Training implements Serializable {
+
+    @SerializedName("id")
     private String id;
-    
+
     @SerializedName("training_date")
     private String trainingDate;
-    
+
     @SerializedName("created_by")
     private String createdBy;
-    
+
     @SerializedName("created_at")
     private String createdAt;
-    
+
     private String title;
-    
+
     private String description;
 
     // Constructors

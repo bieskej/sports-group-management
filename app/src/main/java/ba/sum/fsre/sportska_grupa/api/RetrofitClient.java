@@ -24,13 +24,14 @@ public class RetrofitClient {
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     Request.Builder builder = original.newBuilder()
-                            .addHeader("apikey", Constants.ANON_KEY);
+                            .header("apikey", Constants.ANON_KEY)
+                            .header("Accept", "application/json");
 
                     // Dodaj Authorization header ako postoji spremljeni token
                     AuthManager authManager = new AuthManager(appContext);
                     String token = authManager.getToken();
-                    if (token != null) {
-                        builder.addHeader("Authorization", "Bearer " + token);
+                    if (token != null && !token.isEmpty()) {
+                        builder.header("Authorization", "Bearer " + token);
                     }
 
                     return chain.proceed(builder.build());

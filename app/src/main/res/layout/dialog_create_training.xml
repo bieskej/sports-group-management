@@ -6,20 +6,21 @@
     android:padding="20dp">
 
     <TextView
+        android:id="@+id/tvDialogTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Novi Trening"
         android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp" />
 
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Naziv treninga"
-        android:inputType="textCapSentences"/>
+        android:inputType="textCapSentences" />
 
     <EditText
         android:id="@+id/etDescription"
@@ -28,16 +29,14 @@
         android:hint="Opis"
         android:inputType="textMultiLine"
         android:minLines="2"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
 
     <EditText
         android:id="@+id/etDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Datum (YYYY-MM-DD)"
-        android:inputType="date"
-        android:layout_marginTop="8dp"/>
-    
-    <!-- Ideally use a DatePicker, but simple EditText for now for speed/MVDP -->
+        android:inputType="text"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>
