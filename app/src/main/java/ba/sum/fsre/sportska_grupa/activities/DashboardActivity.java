@@ -24,7 +24,7 @@ import ba.sum.fsre.sportska_grupa.adapters.TrainingAdapter;
 import ba.sum.fsre.sportska_grupa.api.ApiCallback;
 import ba.sum.fsre.sportska_grupa.api.RetrofitClient;
 import ba.sum.fsre.sportska_grupa.models.Training;
-import ba.sum.fsre.sportska_grupa.models.TrainingUpdateRequest;
+import ba.sum.fsre.sportska_grupa.models.request.TrainingUpdateRequest;
 import ba.sum.fsre.sportska_grupa.utils.AuthManager;
 import retrofit2.Call;
 
@@ -82,6 +82,7 @@ public class DashboardActivity extends AppCompatActivity {
         // Promijenjen konstruktor: dodali smo edit listener
         adapter = new TrainingAdapter(
                 new ArrayList<>(),
+                authManager.isTrainer(),
                 this::showDeleteConfirmationDialog,
                 this::showEditTrainingDialog
         );
