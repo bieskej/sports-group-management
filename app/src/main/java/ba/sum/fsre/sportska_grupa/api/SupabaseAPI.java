@@ -1,17 +1,21 @@
 package ba.sum.fsre.sportska_grupa.api;
 
+import java.util.List;
+
 import ba.sum.fsre.sportska_grupa.models.Profile;
 import ba.sum.fsre.sportska_grupa.models.Training;
-import ba.sum.fsre.sportska_grupa.models.request.RegisterRequest;
+import ba.sum.fsre.sportska_grupa.models.TrainingUpdateRequest;
 import ba.sum.fsre.sportska_grupa.models.request.LoginRequest;
+import ba.sum.fsre.sportska_grupa.models.request.RegisterRequest;
 import ba.sum.fsre.sportska_grupa.models.response.AuthResponse;
-import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
-import retrofit2.http.DELETE;
 import retrofit2.http.Query;
 
 public interface SupabaseAPI {
@@ -38,6 +42,13 @@ public interface SupabaseAPI {
     Call<List<Training>> createTraining(@Body Training training);
 
     @DELETE("rest/v1/trainings")
-    Call<Void> deleteTraining(@retrofit2.http.Query("id") String id);
+    Call<Void> deleteTraining(@Query("id") String id);
 
+    // ✅ UPDATE TRAINING
+    @Headers({"Content-Type: application/json", "Prefer: return=representation"})
+    @PATCH("rest/v1/trainings")
+    Call<List<Training>> updateTraining(
+            @Query("id") String idFilter,   // "eq.<training_id>"
+            @Body TrainingUpdateRequest request
+    );
 }
