@@ -1,92 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
-    tools:context=".activities.RegisterActivity">
+    android:background="#F3F4F6">
 
-    <LinearLayout
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <ProgressBar
-            android:id="@+id/registerProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/usernameTxt"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12sp"
-            android:ems="10"
-            android:hint="Unesite ime"
-            android:inputType="text"
-            android:padding="16sp"
-            android:textSize="16sp" />
-            <!--android:background="@drawable/input_background"-->
+            android:orientation="vertical"
+            android:padding="22dp">
 
-        <EditText
-            android:id="@+id/emailTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12sp"
-            android:ems="10"
-            android:hint="Unesite email adresu"
-            android:inputType="textEmailAddress"
-            android:padding="16sp"
-            android:textSize="16sp" />
-            <!--android:background="@drawable/input_background"-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registracija"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#111827"
+                android:layout_marginBottom="6dp"/>
 
-        <EditText
-            android:id="@+id/passwordTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12sp"
-            android:ems="10"
-            android:hint="Unesite lozinku"
-            android:inputType="textPassword"
-            android:padding="16sp" />
-            <!--android:background="@drawable/input_background"-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kreirajte novi korisnički račun"
+                android:textSize="13sp"
+                android:textColor="#6B7280"
+                android:layout_marginBottom="16dp"/>
 
-        <EditText
-            android:id="@+id/passwordCnfTxt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12sp"
-            android:ems="10"
-            android:hint="Ponovno unesite lozinku"
-            android:inputType="textPassword"
-            android:padding="16sp" />
-            <!--android:background="@drawable/input_background"-->
+            <ProgressBar
+                android:id="@+id/registerProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"/>
 
-        <Button
-            android:id="@+id/registerBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16sp"
-            android:backgroundTint="#4CAF50"
-            android:padding="16sp"
-            android:text="Registrirajte se"
-            android:textSize="18sp" />
+            <!-- Ime -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ime"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#374151"
+                android:layout_marginBottom="6dp"/>
 
-        <Button
-            android:id="@+id/backToLoginBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32sp"
-            android:padding="16sp"
-            android:text="Prijavite se"
-            android:textSize="18sp" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/usernameTxt"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Unesite ime"
+                android:inputType="textPersonName"
+                android:padding="14dp"
+                android:background="@drawable/input_rounded"
+                android:textColor="#111827"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Email -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#374151"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/emailTxt"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="npr. ime.prezime@email.com"
+                android:inputType="textEmailAddress"
+                android:padding="14dp"
+                android:background="@drawable/input_rounded"
+                android:textColor="#111827"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Lozinka -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lozinka"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#374151"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/passwordTxt"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Unesite lozinku"
+                android:inputType="textPassword"
+                android:padding="14dp"
+                android:background="@drawable/input_rounded"
+                android:textColor="#111827"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Potvrda lozinke -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Potvrdite lozinku"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#374151"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/passwordCnfTxt"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Ponovno unesite lozinku"
+                android:inputType="textPassword"
+                android:padding="14dp"
+                android:background="@drawable/input_rounded"
+                android:textColor="#111827"
+                android:layout_marginBottom="18dp"/>
+
+            <!-- REGISTER BUTTON -->
+            <Button
+                android:id="@+id/registerBtn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="Registrirajte se"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/btn_primary_rounded"/>
+
+            <!-- BACK TO LOGIN -->
+            <Button
+                android:id="@+id/backToLoginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="Već imate račun? Prijavite se"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/btn_secondary_rounded"
+                android:layout_marginTop="12dp"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
