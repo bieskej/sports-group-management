@@ -38,6 +38,9 @@
             android:exported="false">
 
         </activity>
+        <activity
+            android:name=".activities.TrainingPlayersActivity"
+            android:parentActivityName=".activities.DashboardActivity" />
 
     </application>
 
