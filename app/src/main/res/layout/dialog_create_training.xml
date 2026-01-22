@@ -31,12 +31,26 @@
         android:minLines="2"
         android:layout_marginTop="8dp" />
 
+    <!-- DATUM -->
     <EditText
         android:id="@+id/etDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Datum (YYYY-MM-DD)"
-        android:inputType="text"
+        android:hint="Odaberi datum"
+        android:focusable="false"
+        android:clickable="true"
+        android:inputType="none"
+        android:layout_marginTop="12dp" />
+
+    <!-- VRIJEME -->
+    <EditText
+        android:id="@+id/etTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Odaberi vrijeme"
+        android:focusable="false"
+        android:clickable="true"
+        android:inputType="none"
         android:layout_marginTop="8dp" />
 
 </LinearLayout>

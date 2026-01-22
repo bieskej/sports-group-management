@@ -1,5 +1,6 @@
 package ba.sum.fsre.sportska_grupa.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -77,8 +78,19 @@ public class TrainingPlayersActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // Proslijedi isTrainer u adapter
-        adapter = new PlayerAttendanceAdapter(new ArrayList<>(), isTrainer, this::onAttendanceChanged);
+
+        adapter = new PlayerAttendanceAdapter(
+                new ArrayList<>(),
+                isTrainer,
+                this::onAttendanceChanged,
+                player -> {
+                    Intent intent = new Intent(TrainingPlayersActivity.this, StatisticsActivity.class);
+                    intent.putExtra("playerId", player.getId());
+                    intent.putExtra("trainingId", trainingId);
+                    startActivity(intent);
+                }
+        );
+
         recyclerView.setAdapter(adapter);
     }
 
@@ -93,7 +105,6 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     }
 
     private void loadAllPlayers() {
-        // Dohvati sve igrače
         RetrofitClient.getInstance(this)
                 .getApi()
                 .getAllPlayers("eq.player")
@@ -121,7 +132,6 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     private void loadMyAttendance() {
         String userId = authManager.getUserId();
 
-        // Dohvati samo trenutnog igrača
         RetrofitClient.getInstance(this)
                 .getApi()
                 .getPlayerById("eq." + userId)
@@ -147,7 +157,6 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     }
 
     private void loadAttendanceForPlayers(List<Player> players) {
-        // Dohvati prisutnost za ovaj trening
         RetrofitClient.getInstance(this)
                 .getApi()
                 .getAttendanceForTraining("eq." + trainingId)
@@ -156,7 +165,6 @@ public class TrainingPlayersActivity extends AppCompatActivity {
                     public void onSuccess(List<ba.sum.fsre.sportska_grupa.models.Attendance> attendances) {
                         setLoading(false);
 
-                        // Spoji podatke
                         for (Player player : players) {
                             player.setPresent(false);
                             player.setAttendanceId(null);
@@ -164,9 +172,9 @@ public class TrainingPlayersActivity extends AppCompatActivity {
                             if (attendances != null) {
                                 for (ba.sum.fsre.sportska_grupa.models.Attendance att : attendances) {
                                     if (att.getPlayerId().equals(player.getId())) {
+                                        // Uzimamo ZADNJI zapis (najnoviji)
                                         player.setPresent(att.isPresent());
                                         player.setAttendanceId(att.getId());
-                                        break;
                                     }
                                 }
                             }
@@ -178,14 +186,12 @@ public class TrainingPlayersActivity extends AppCompatActivity {
                     @Override
                     public void onError(String errorMessage) {
                         setLoading(false);
-                        // Ako nema attendance zapisa, prikaži igrače sa present=false
                         adapter.updateData(players);
                     }
                 });
     }
 
     private void onAttendanceChanged(Player player, boolean isPresent) {
-        // Samo trener može mijenjati prisutnost
         if (!isTrainer) {
             Toast.makeText(this, "Samo trener može ažurirati prisutnost", Toast.LENGTH_SHORT).show();
             return;
@@ -218,7 +224,6 @@ public class TrainingPlayersActivity extends AppCompatActivity {
                     public void onError(String errorMessage) {
                         Toast.makeText(TrainingPlayersActivity.this,
                                 "Greška: " + errorMessage, Toast.LENGTH_SHORT).show();
-                        // Vrati checkbox na prethodno stanje
                         loadPlayers();
                     }
                 });
