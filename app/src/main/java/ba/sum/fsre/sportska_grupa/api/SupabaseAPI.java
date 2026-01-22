@@ -37,8 +37,9 @@ public interface SupabaseAPI {
             @Query("select") String select
     );
 
-    @GET("rest/v1/trainings?select=*&order=training_date.desc")
+    @GET("rest/v1/trainings?select=*&order=training_date.desc,training_time.desc")
     Call<List<Training>> getTrainings();
+
 
     @Headers({"Content-Type: application/json", "Prefer: return=representation"})
     @POST("rest/v1/trainings")
@@ -62,13 +63,11 @@ public interface SupabaseAPI {
     Call<List<Player>> getAllPlayers(
             @Query("role") String roleFilter
     );
-
     // Dohvati prisutnost za određeni trening
     @GET("rest/v1/attendance")
     Call<List<Attendance>> getAttendanceForTraining(
             @Query("training_id") String trainingIdFilter
     );
-
     // Kreiraj attendance
     @Headers({"Content-Type: application/json", "Prefer: return=representation"})
     @POST("rest/v1/attendance")

@@ -20,14 +20,25 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
         void onAttendanceChanged(Player player, boolean isPresent);
     }
 
+    public interface OnPlayerClickListener {
+        void onPlayerClick(Player player);
+    }
+
     private List<Player> players;
     private boolean isTrainer;
-    private OnAttendanceChangeListener listener;
+    private OnAttendanceChangeListener attendanceListener;
+    private OnPlayerClickListener playerClickListener;
 
-    public PlayerAttendanceAdapter(List<Player> players, boolean isTrainer, OnAttendanceChangeListener listener) {
+    public PlayerAttendanceAdapter(
+            List<Player> players,
+            boolean isTrainer,
+            OnAttendanceChangeListener attendanceListener,
+            OnPlayerClickListener playerClickListener
+    ) {
         this.players = players;
         this.isTrainer = isTrainer;
-        this.listener = listener;
+        this.attendanceListener = attendanceListener;
+        this.playerClickListener = playerClickListener;
     }
 
     public void updateData(List<Player> newPlayers) {
@@ -49,20 +60,28 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
 
         holder.tvPlayerName.setText(player.getUsername());
 
-        // Privremeno ukloni listener da izbjegneš neželjene pozive
-        holder.cbPresent.setOnCheckedChangeListener(null);
-        holder.cbPresent.setChecked(player.isPresent());
+        // === CHECKBOX LOGIKA ===
+        if (isTrainer) {
+            holder.cbPresent.setVisibility(View.VISIBLE);
+            holder.cbPresent.setOnCheckedChangeListener(null);
+            holder.cbPresent.setChecked(player.isPresent());
+            holder.cbPresent.setEnabled(true);
 
-        // Samo trener može mijenjati checkbox
-        holder.cbPresent.setEnabled(isTrainer);
-
-        // Ponovo postavi listener
-        holder.cbPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isTrainer) {
+            holder.cbPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 player.setPresent(isChecked);
-                if (listener != null) {
-                    listener.onAttendanceChanged(player, isChecked);
+                if (attendanceListener != null) {
+                    attendanceListener.onAttendanceChanged(player, isChecked);
                 }
+            });
+        } else {
+            // USER → sakrij checkbox potpuno
+            holder.cbPresent.setVisibility(View.GONE);
+        }
+
+        // === KLIK NA IGRACA (STATISTIKA) ===
+        holder.itemView.setOnClickListener(v -> {
+            if (playerClickListener != null) {
+                playerClickListener.onPlayerClick(player);
             }
         });
     }

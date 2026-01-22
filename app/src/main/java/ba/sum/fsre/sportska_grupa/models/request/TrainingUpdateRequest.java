@@ -7,21 +7,19 @@ public class TrainingUpdateRequest {
     @SerializedName("training_date")
     private String trainingDate;
 
+    @SerializedName("training_time")
+    private String trainingTime;
+
+    @SerializedName("title")
     private String title;
 
+    @SerializedName("description")
     private String description;
 
-    public TrainingUpdateRequest(String trainingDate, String title, String description) {
+    public TrainingUpdateRequest(String trainingDate, String trainingTime, String title, String description) {
         this.trainingDate = trainingDate;
+        this.trainingTime = trainingTime;
         this.title = title;
         this.description = description;
     }
-
-    public String getTrainingDate() { return trainingDate; }
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-
-    public void setTrainingDate(String trainingDate) { this.trainingDate = trainingDate; }
-    public void setTitle(String title) { this.title = title; }
-    public void setDescription(String description) { this.description = description; }
 }

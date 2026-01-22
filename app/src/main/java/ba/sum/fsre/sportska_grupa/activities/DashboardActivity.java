@@ -1,5 +1,7 @@
 package ba.sum.fsre.sportska_grupa.activities;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import ba.sum.fsre.sportska_grupa.R;
 import ba.sum.fsre.sportska_grupa.adapters.TrainingAdapter;
@@ -79,7 +83,6 @@ public class DashboardActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Promijenjen konstruktor: dodali smo edit listener
         adapter = new TrainingAdapter(
                 new ArrayList<>(),
                 authManager.isTrainer(),
@@ -124,30 +127,37 @@ public class DashboardActivity extends AppCompatActivity {
         EditText etTitle = dialogView.findViewById(R.id.etTitle);
         EditText etDescription = dialogView.findViewById(R.id.etDescription);
         EditText etDate = dialogView.findViewById(R.id.etDate);
+        EditText etTime = dialogView.findViewById(R.id.etTime);
+
+        setupDatePicker(etDate);
+        setupTimePicker(etTime);
 
         builder.setPositiveButton("Kreiraj", (dialog, which) -> {
             String title = etTitle.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
             String date = etDate.getText().toString().trim();
+            String time = etTime.getText().toString().trim();
 
-            if (title.isEmpty() || date.isEmpty()) {
-                Toast.makeText(this, "Naslov i datum su obavezni", Toast.LENGTH_SHORT).show();
+            if (title.isEmpty() || date.isEmpty() || time.isEmpty()) {
+                Toast.makeText(this, "Naslov, datum i vrijeme su obavezni", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            createTraining(title, description, date);
+            createTraining(title, description, date, time);
         });
 
         builder.setNegativeButton("Odustani", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
-
-    private void createTraining(String title, String description, String date) {
+    private void createTraining(String title, String description, String date, String time) {
         setLoading(true);
         String userId = authManager.getUserId();
 
-        Training training = new Training(date, userId, title, description);
+        // "HH:mm" -> "HH:mm:00" (sigurno za Postgres time)
+        String timeForDb = (time.length() == 5) ? (time + ":00") : time;
+
+        Training training = new Training(date, timeForDb, userId, title, description);
 
         RetrofitClient.getInstance(this).getApi().createTraining(training).enqueue(new ApiCallback<List<Training>>() {
             @Override
@@ -165,50 +175,62 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    //  NOVO: Edit dialog
     private void showEditTrainingDialog(Training training) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_create_training, null);
         builder.setView(dialogView);
 
-        // OVO DODAJEŠ (NASLOV)
         android.widget.TextView tvTitle = dialogView.findViewById(R.id.tvDialogTitle);
         tvTitle.setText("Uredi Trening");
 
         EditText etTitle = dialogView.findViewById(R.id.etTitle);
         EditText etDescription = dialogView.findViewById(R.id.etDescription);
         EditText etDate = dialogView.findViewById(R.id.etDate);
+        EditText etTime = dialogView.findViewById(R.id.etTime);
 
-        // Prefill podataka
+        // Prefill
         etTitle.setText(training.getTitle());
         etDescription.setText(training.getDescription());
         etDate.setText(training.getTrainingDate());
+
+        // Ako je u bazi "HH:mm:ss", prikaži "HH:mm"
+        String t = training.getTrainingTime();
+        if (t != null && t.length() >= 5) {
+            t = t.substring(0, 5);
+        } else {
+            t = "";
+        }
+        etTime.setText(t);
+
+        setupDatePicker(etDate);
+        setupTimePicker(etTime);
 
         builder.setPositiveButton("Spremi", (dialog, which) -> {
             String newTitle = etTitle.getText().toString().trim();
             String newDescription = etDescription.getText().toString().trim();
             String newDate = etDate.getText().toString().trim();
+            String newTime = etTime.getText().toString().trim();
 
-            if (newTitle.isEmpty() || newDate.isEmpty()) {
-                Toast.makeText(this, "Naslov i datum su obavezni", Toast.LENGTH_SHORT).show();
+            if (newTitle.isEmpty() || newDate.isEmpty() || newTime.isEmpty()) {
+                Toast.makeText(this, "Naslov, datum i vrijeme su obavezni", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            updateTraining(training, newTitle, newDescription, newDate);
+            updateTraining(training, newTitle, newDescription, newDate, newTime);
         });
 
         builder.setNegativeButton("Odustani", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
-
-    //  NOVO: Update API call (PATCH)
-    private void updateTraining(Training training, String title, String description, String date) {
+    private void updateTraining(Training training, String title, String description, String date, String time) {
         setLoading(true);
 
         String idQuery = "eq." + training.getId();
 
-        TrainingUpdateRequest request = new TrainingUpdateRequest(date, title, description);
+        String timeForDb = (time.length() == 5) ? (time + ":00") : time;
+
+        TrainingUpdateRequest request = new TrainingUpdateRequest(date, timeForDb, title, description);
 
         Call<List<Training>> call = RetrofitClient.getInstance(this).getApi().updateTraining(idQuery, request);
 
@@ -225,6 +247,43 @@ public class DashboardActivity extends AppCompatActivity {
                 setLoading(false);
                 handleApiError(errorMessage);
             }
+        });
+    }
+
+    private void setupDatePicker(EditText etDate) {
+        etDate.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog dp = new DatePickerDialog(
+                    DashboardActivity.this,
+                    (view, y, m, d) -> {
+                        String formatted = String.format(Locale.getDefault(), "%04d-%02d-%02d", y, (m + 1), d);
+                        etDate.setText(formatted);
+                    },
+                    year, month, day
+            );
+            dp.show();
+        });
+    }
+
+    private void setupTimePicker(EditText etTime) {
+        etTime.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int minute = cal.get(Calendar.MINUTE);
+
+            TimePickerDialog tp = new TimePickerDialog(
+                    DashboardActivity.this,
+                    (view, h, min) -> {
+                        String formatted = String.format(Locale.getDefault(), "%02d:%02d", h, min);
+                        etTime.setText(formatted);
+                    },
+                    hour, minute, true
+            );
+            tp.show();
         });
     }
 
