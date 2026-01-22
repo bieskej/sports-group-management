@@ -54,7 +54,10 @@ public interface SupabaseAPI {
             @Query("id") String idFilter,   // "eq.<training_id>"
             @Body TrainingUpdateRequest request
     );
-
+    @GET("rest/v1/profiles")
+    Call<List<Player>> getPlayerById(
+            @Query("id") String idFilter
+    );
     @GET("rest/v1/profiles")
     Call<List<Player>> getAllPlayers(
             @Query("role") String roleFilter
