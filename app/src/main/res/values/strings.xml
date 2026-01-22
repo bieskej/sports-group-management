@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Sportska_grupa</string>
+    <string name="team_logo">Logo sportske grupe</string>
+    <string name="login_title">Dobrodošli Nazad!</string>
+    <string name="login_subtitle">Prijavite se za pristup trening programu</string>
+    <string name="forgot_password">Zaboravili ste lozinku?</string>
+    <string name="login_button">PRIJAVI SE</string>
+    <string name="register_button">KREIRAJ NOVI RAČUN</string>
+    <string name="footer_text">© 2024 Sportska Grupa - Svi treninzi, jedan tim!</string>
 </resources>

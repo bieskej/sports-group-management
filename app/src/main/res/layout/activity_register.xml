@@ -2,6 +2,374 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F5F6"
+    android:padding="16dp">
+
+    <!-- Sportski motiv u pozadini -->
+    <ImageView
+        android:id="@+id/backgroundPattern"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:alpha="0.05"
+        android:rotation="-15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardRegister"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="24dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.92">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="28dp">
+
+                    <!-- Logo ili ikona -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="🏃‍♂️"
+                        android:textSize="48sp"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Naslov -->
+                    <TextView
+                        android:id="@+id/tvRegisterTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Kreiraj Račun"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        android:textColor="#1F2937"
+                        android:gravity="center"
+                        android:layout_marginBottom="6dp"/>
+
+                    <!-- Podnaslov -->
+                    <TextView
+                        android:id="@+id/tvRegisterSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pridružite se našem trening timu"
+                        android:textSize="14sp"
+                        android:textColor="#6B7280"
+                        android:gravity="center"
+                        android:layout_marginBottom="24dp"/>
+
+                    <!-- Progress bar -->
+                    <ProgressBar
+                        android:id="@+id/registerProgressBar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:visibility="gone"
+                        android:indeterminateTint="#F2BED1"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Korisničko ime -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Korisničko ime"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#374151"
+                            android:layout_marginBottom="6dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxStrokeColor="#F2BED1"
+                            app:hintTextColor="#9CA3AF"
+                            app:endIconMode="clear_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/usernameTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="npr. marko123"
+                                android:inputType="textPersonName"
+                                android:padding="14dp"
+                                android:textColor="#111827"
+                                android:textSize="14sp"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Email -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Email adresa"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#374151"
+                            android:layout_marginBottom="6dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxStrokeColor="#F2BED1"
+                            app:hintTextColor="#9CA3AF"
+                            app:endIconMode="clear_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/emailTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="npr. ime.prezime@email.com"
+                                android:inputType="textEmailAddress"
+                                android:padding="14dp"
+                                android:textColor="#111827"
+                                android:textSize="14sp"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Lozinka -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Lozinka"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#374151"
+                            android:layout_marginBottom="6dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxStrokeColor="#F2BED1"
+                            app:hintTextColor="#9CA3AF"
+                            app:endIconMode="password_toggle"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/passwordTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Najmanje 6 znakova"
+                                android:inputType="textPassword"
+                                android:padding="14dp"
+                                android:textColor="#111827"
+                                android:textSize="14sp"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Potvrda lozinke -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="24dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Potvrdite lozinku"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#374151"
+                            android:layout_marginBottom="6dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:boxBackgroundColor="@android:color/transparent"
+                            app:boxBackgroundMode="outline"
+                            app:boxCornerRadiusTopStart="12dp"
+                            app:boxCornerRadiusTopEnd="12dp"
+                            app:boxCornerRadiusBottomStart="12dp"
+                            app:boxCornerRadiusBottomEnd="12dp"
+                            app:boxStrokeColor="#F2BED1"
+                            app:hintTextColor="#9CA3AF"
+                            app:endIconMode="password_toggle"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/passwordCnfTxt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Ponovite lozinku"
+                                android:inputType="textPassword"
+                                android:padding="14dp"
+                                android:textColor="#111827"
+                                android:textSize="14sp"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Dugme za registraciju -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/registerBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="REGISTRIRAJ SE"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:letterSpacing="0.02"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="#F2BED1"
+                        app:rippleColor="#FDCEDF"
+                        android:textColor="#1F2937"/>
+
+                    <!-- Separator -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginVertical="24dp">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:background="#E5E7EB"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ILI"
+                            android:textSize="12sp"
+                            android:textColor="#6B7280"
+                            android:paddingHorizontal="12dp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:background="#E5E7EB"/>
+
+                    </LinearLayout>
+
+                    <!-- Povratak na login -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/backToLoginBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="VEĆ IMAM RAČUN"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
+                        android:letterSpacing="0.02"
+                        app:cornerRadius="16dp"
+                        app:strokeColor="#F2BED1"
+                        app:strokeWidth="2dp"
+                        app:backgroundTint="@android:color/transparent"
+                        app:rippleColor="#F8E8EE"
+                        android:textColor="#F2BED1"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                    <!-- Emoji footer -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="💪 🏃 ⚽ 🏀 🏐"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:layout_marginTop="24dp"
+                        android:letterSpacing="4"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Footer -->
+            <TextView
+                android:id="@+id/tvFooter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="© 2024 Sportska Grupa - Svi treninzi, jedan tim!"
+                android:textSize="11sp"
+                android:textColor="#9CA3AF"
+                android:padding="12dp"
+                app:layout_constraintTop_toBottomOf="@id/cardRegister"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F4F6">
@@ -51,7 +419,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"/>
 
-            <!-- Ime -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,7 +440,7 @@
                 android:textColor="#111827"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Email -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -93,7 +461,7 @@
                 android:textColor="#111827"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Lozinka -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,7 +482,7 @@
                 android:textColor="#111827"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Potvrda lozinke -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +503,6 @@
                 android:textColor="#111827"
                 android:layout_marginBottom="18dp"/>
 
-            <!-- REGISTER BUTTON -->
             <Button
                 android:id="@+id/registerBtn"
                 android:layout_width="match_parent"
@@ -146,7 +513,7 @@
                 android:textColor="@android:color/white"
                 android:background="@drawable/btn_primary_rounded"/>
 
-            <!-- BACK TO LOGIN -->
+
             <Button
                 android:id="@+id/backToLoginBtn"
                 android:layout_width="match_parent"
@@ -162,3 +529,4 @@
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+-->
