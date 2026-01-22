@@ -21,10 +21,12 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
     }
 
     private List<Player> players;
+    private boolean isTrainer;
     private OnAttendanceChangeListener listener;
 
-    public PlayerAttendanceAdapter(List<Player> players, OnAttendanceChangeListener listener) {
+    public PlayerAttendanceAdapter(List<Player> players, boolean isTrainer, OnAttendanceChangeListener listener) {
         this.players = players;
+        this.isTrainer = isTrainer;
         this.listener = listener;
     }
 
@@ -51,11 +53,16 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
         holder.cbPresent.setOnCheckedChangeListener(null);
         holder.cbPresent.setChecked(player.isPresent());
 
+        // Samo trener može mijenjati checkbox
+        holder.cbPresent.setEnabled(isTrainer);
+
         // Ponovo postavi listener
         holder.cbPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            player.setPresent(isChecked);
-            if (listener != null) {
-                listener.onAttendanceChanged(player, isChecked);
+            if (isTrainer) {
+                player.setPresent(isChecked);
+                if (listener != null) {
+                    listener.onAttendanceChanged(player, isChecked);
+                }
             }
         });
     }

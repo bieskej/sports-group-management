@@ -30,6 +30,7 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     private PlayerAttendanceAdapter adapter;
     private AuthManager authManager;
     private String trainingId;
+    private boolean isTrainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class TrainingPlayersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_training_players);
 
         authManager = new AuthManager(this);
+        isTrainer = authManager.isTrainer();
 
         trainingId = getIntent().getStringExtra("training_id");
         String trainingTitle = getIntent().getStringExtra("training_title");
@@ -66,18 +68,31 @@ public class TrainingPlayersActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewPlayers);
         progressBar = findViewById(R.id.progressBar);
 
-        tvTitle.setText("Prisutnost – " + trainingTitle);
+        if (isTrainer) {
+            tvTitle.setText("Prisutnost – " + trainingTitle);
+        } else {
+            tvTitle.setText("Moja prisutnost – " + trainingTitle);
+        }
     }
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new PlayerAttendanceAdapter(new ArrayList<>(), this::onAttendanceChanged);
+        // Proslijedi isTrainer u adapter
+        adapter = new PlayerAttendanceAdapter(new ArrayList<>(), isTrainer, this::onAttendanceChanged);
         recyclerView.setAdapter(adapter);
     }
 
     private void loadPlayers() {
         setLoading(true);
 
+        if (isTrainer) {
+            loadAllPlayers();
+        } else {
+            loadMyAttendance();
+        }
+    }
+
+    private void loadAllPlayers() {
         // Dohvati sve igrače
         RetrofitClient.getInstance(this)
                 .getApi()
@@ -91,6 +106,34 @@ public class TrainingPlayersActivity extends AppCompatActivity {
                             setLoading(false);
                             Toast.makeText(TrainingPlayersActivity.this,
                                     "Nema registriranih igrača", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        setLoading(false);
+                        Toast.makeText(TrainingPlayersActivity.this,
+                                "Greška: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void loadMyAttendance() {
+        String userId = authManager.getUserId();
+
+        // Dohvati samo trenutnog igrača
+        RetrofitClient.getInstance(this)
+                .getApi()
+                .getPlayerById("eq." + userId)
+                .enqueue(new ApiCallback<List<Player>>() {
+                    @Override
+                    public void onSuccess(List<Player> result) {
+                        if (result != null && !result.isEmpty()) {
+                            loadAttendanceForPlayers(result);
+                        } else {
+                            setLoading(false);
+                            Toast.makeText(TrainingPlayersActivity.this,
+                                    "Greška pri učitavanju podataka", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -142,11 +185,15 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     }
 
     private void onAttendanceChanged(Player player, boolean isPresent) {
+        // Samo trener može mijenjati prisutnost
+        if (!isTrainer) {
+            Toast.makeText(this, "Samo trener može ažurirati prisutnost", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (player.getAttendanceId() == null) {
-            // Kreiraj novi zapis
             createAttendance(player, isPresent);
         } else {
-            // Ažuriraj postojeći
             updateAttendance(player, isPresent);
         }
     }
