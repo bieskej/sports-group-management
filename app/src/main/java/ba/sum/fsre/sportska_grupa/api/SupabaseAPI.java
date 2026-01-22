@@ -2,8 +2,11 @@ package ba.sum.fsre.sportska_grupa.api;
 
 import java.util.List;
 
+import ba.sum.fsre.sportska_grupa.models.Attendance;
+import ba.sum.fsre.sportska_grupa.models.Player;
 import ba.sum.fsre.sportska_grupa.models.Profile;
 import ba.sum.fsre.sportska_grupa.models.Training;
+import ba.sum.fsre.sportska_grupa.models.request.AttendanceRequest;
 import ba.sum.fsre.sportska_grupa.models.request.TrainingUpdateRequest;
 import ba.sum.fsre.sportska_grupa.models.request.LoginRequest;
 import ba.sum.fsre.sportska_grupa.models.request.RegisterRequest;
@@ -50,5 +53,29 @@ public interface SupabaseAPI {
     Call<List<Training>> updateTraining(
             @Query("id") String idFilter,   // "eq.<training_id>"
             @Body TrainingUpdateRequest request
+    );
+
+    @GET("rest/v1/profiles")
+    Call<List<Player>> getAllPlayers(
+            @Query("role") String roleFilter
+    );
+
+    // Dohvati prisutnost za određeni trening
+    @GET("rest/v1/attendance")
+    Call<List<Attendance>> getAttendanceForTraining(
+            @Query("training_id") String trainingIdFilter
+    );
+
+    // Kreiraj attendance
+    @Headers({"Content-Type: application/json", "Prefer: return=representation"})
+    @POST("rest/v1/attendance")
+    Call<List<Attendance>> createAttendance(@Body AttendanceRequest request);
+
+    // Ažuriraj attendance
+    @Headers({"Content-Type: application/json", "Prefer: return=representation"})
+    @PATCH("rest/v1/attendance")
+    Call<List<Attendance>> updateAttendance(
+            @Query("id") String idFilter,
+            @Body AttendanceRequest request
     );
 }

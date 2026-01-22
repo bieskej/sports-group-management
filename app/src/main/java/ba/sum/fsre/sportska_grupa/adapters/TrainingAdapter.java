@@ -1,5 +1,6 @@
 package ba.sum.fsre.sportska_grupa.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ba.sum.fsre.sportska_grupa.R;
+import ba.sum.fsre.sportska_grupa.activities.TrainingPlayersActivity;
 import ba.sum.fsre.sportska_grupa.models.Training;
 
 import java.util.List;
@@ -82,7 +84,12 @@ public class TrainingAdapter extends RecyclerView.Adapter<TrainingAdapter.Traini
         });
 
 
-        holder.itemView.setOnClickListener(null);
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), TrainingPlayersActivity.class);
+            intent.putExtra("training_id", training.getId());
+            intent.putExtra("training_title", training.getTitle());
+            v.getContext().startActivity(intent);
+        });
 
         if (!isTrainer) {
             holder.btnEdit.setVisibility(View.GONE);
