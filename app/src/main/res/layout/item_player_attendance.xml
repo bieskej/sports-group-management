@@ -22,13 +22,13 @@
             android:id="@+id/tvPlayerInitial"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:background="@drawable/bg_player_avatar"
             android:gravity="center"
             android:text="A"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#F2BED1"
             android:layout_marginEnd="16dp"/>
-            <!--android:background="@drawable/bg_player_avatar"-->
 
         <!-- Player info -->
         <LinearLayout
@@ -57,7 +57,7 @@
 
         </LinearLayout>
 
-        <!-- Checkbox -->
+        <!-- Checkbox (za trenera) -->
         <CheckBox
             android:id="@+id/cbPresent"
             android:layout_width="wrap_content"
@@ -65,6 +65,17 @@
             android:buttonTint="#F2BED1"
             android:scaleX="1.2"
             android:scaleY="1.2"/>
+
+        <!-- Status ikona (za igrača - umjesto checkboxa) -->
+        <TextView
+            android:id="@+id/tvPresenceStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✓"
+            android:textSize="32sp"
+            android:textColor="#10B981"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

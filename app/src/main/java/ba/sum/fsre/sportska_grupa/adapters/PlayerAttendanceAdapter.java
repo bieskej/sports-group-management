@@ -27,18 +27,16 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
     private List<Player> players;
     private boolean isTrainer;
     private OnAttendanceChangeListener attendanceListener;
-    private OnPlayerClickListener playerClickListener;
+    private OnPlayerClickListener clickListener;
 
-    public PlayerAttendanceAdapter(
-            List<Player> players,
-            boolean isTrainer,
-            OnAttendanceChangeListener attendanceListener,
-            OnPlayerClickListener playerClickListener
-    ) {
+    public PlayerAttendanceAdapter(List<Player> players,
+                                   boolean isTrainer,
+                                   OnAttendanceChangeListener attendanceListener,
+                                   OnPlayerClickListener clickListener) {
         this.players = players;
         this.isTrainer = isTrainer;
         this.attendanceListener = attendanceListener;
-        this.playerClickListener = playerClickListener;
+        this.clickListener = clickListener;
     }
 
     public void updateData(List<Player> newPlayers) {
@@ -58,15 +56,27 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Player player = players.get(position);
 
+        // Postavi ime
         holder.tvPlayerName.setText(player.getUsername());
+        holder.tvPlayerRole.setText("Igrač");
 
-        // === CHECKBOX LOGIKA ===
+        // Postavi inicijal
+        if (player.getUsername() != null && !player.getUsername().isEmpty()) {
+            String initial = player.getUsername().substring(0, 1).toUpperCase();
+            holder.tvPlayerInitial.setText(initial);
+        }
+
         if (isTrainer) {
+            // Trener vidi checkbox koji može klikati
             holder.cbPresent.setVisibility(View.VISIBLE);
+            holder.tvPresenceStatus.setVisibility(View.GONE);
+
+            // Privremeno ukloni listener
             holder.cbPresent.setOnCheckedChangeListener(null);
             holder.cbPresent.setChecked(player.isPresent());
             holder.cbPresent.setEnabled(true);
 
+            // Postavi listener
             holder.cbPresent.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 player.setPresent(isChecked);
                 if (attendanceListener != null) {
@@ -74,14 +84,24 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
                 }
             });
         } else {
-            // USER → sakrij checkbox potpuno
+            // Igrač vidi samo status ikonu (ne može klikati)
             holder.cbPresent.setVisibility(View.GONE);
+            holder.tvPresenceStatus.setVisibility(View.VISIBLE);
+
+            // Prikaži odgovarajući status
+            if (player.isPresent()) {
+                holder.tvPresenceStatus.setText("✓");
+                holder.tvPresenceStatus.setTextColor(0xFF10B981);
+            } else {
+                holder.tvPresenceStatus.setText("✗");
+                holder.tvPresenceStatus.setTextColor(0xFFEF4444);
+            }
         }
 
-        // === KLIK NA IGRACA (STATISTIKA) ===
+        // Klik na cijelu karticu (opcionalno)
         holder.itemView.setOnClickListener(v -> {
-            if (playerClickListener != null) {
-                playerClickListener.onPlayerClick(player);
+            if (clickListener != null) {
+                clickListener.onPlayerClick(player);
             }
         });
     }
@@ -93,12 +113,18 @@ public class PlayerAttendanceAdapter extends RecyclerView.Adapter<PlayerAttendan
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvPlayerName;
+        TextView tvPlayerRole;
+        TextView tvPlayerInitial;
         CheckBox cbPresent;
+        TextView tvPresenceStatus;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPlayerName = itemView.findViewById(R.id.tvPlayerName);
+            tvPlayerRole = itemView.findViewById(R.id.tvPlayerRole);
+            tvPlayerInitial = itemView.findViewById(R.id.tvPlayerInitial);
             cbPresent = itemView.findViewById(R.id.cbPresent);
+            tvPresenceStatus = itemView.findViewById(R.id.tvPresenceStatus);
         }
     }
 }
