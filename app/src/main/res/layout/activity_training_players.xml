@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F9F5F6">
 
-    <!-- AppBar sa gradijentom -->
+    <!-- TOOLBAR ISTI KAO NA "TRENINZI" (rozi + bijela strelica + bijeli naslov) -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,19 +17,21 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
             app:title="Prisutnost"
             app:titleTextColor="@android:color/white"
-            app:navigationIcon="@android:drawable/ic_menu_revert" />
+            app:navigationIcon="@android:drawable/ic_menu_revert"
+            app:navigationIconTint="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Glavni sadržaj -->
+    <!-- GLAVNI SADRŽAJ -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Kartica sa naslovom treninga -->
+        <!-- KARTICA SA NASLOVOM TRENINGA -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardTrainingTitle"
             android:layout_width="0dp"
@@ -70,7 +72,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Lista igrača -->
+        <!-- LISTA IGRAČA -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPlayers"
             android:layout_width="0dp"
@@ -82,7 +84,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Progress bar -->
+        <!-- PROGRESS BAR -->
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="48dp"
@@ -94,7 +96,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Prazna lista poruka (opcionalno) -->
+        <!-- PRAZNO STANJE -->
         <LinearLayout
             android:id="@+id/emptyStateLayout"
             android:layout_width="wrap_content"
@@ -135,53 +137,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-<!--<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/bg_main_gradient"
-            app:title="Prisutnost"
-            app:titleTextColor="@android:color/white"
-            app:navigationIcon="@android:drawable/ic_menu_revert" />
-
-        <TextView
-            android:id="@+id/tvTrainingTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Prisutnost – Trening"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#111827"
-            android:background="@android:color/white" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewPlayers"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:background="#F3F4F6" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>-->

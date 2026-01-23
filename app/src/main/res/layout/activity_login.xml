@@ -13,14 +13,14 @@
         android:id="@+id/backgroundPattern"
         android:layout_width="300dp"
         android:layout_height="300dp"
-    android:alpha="0.05"
-    android:rotation="15"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:ignore="ContentDescription" />
-        <!--android:src="@drawable/ic_sport_pattern"-->
+        android:alpha="0.05"
+        android:rotation="15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+    <!--android:src="@drawable/ic_sport_pattern"-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardLogin"
@@ -47,12 +47,13 @@
             <!-- Logo sportskog tima -->
             <ImageView
                 android:id="@+id/ivTeamLogo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="16dp"
-            android:contentDescription="@string/team_logo" />
-                <!--android:src="@drawable/ic_team_logo"-->
+                android:adjustViewBounds="true"
+                android:src="@drawable/logo2"
+                android:contentDescription="@string/team_logo" />
 
             <TextView
                 android:id="@+id/tvLoginTitle"
@@ -197,11 +198,11 @@
                 app:cornerRadius="16dp"
                 app:backgroundTint="#F2BED1"
                 app:rippleColor="#FDCEDF"
-                android:textColor="#1F2937"
-            app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="#1F2937"/>
-                <!--android:icon="@drawable/ic_login"-->
+                android:textColor="@android:color/white"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@android:color/white"/>
+            <!--android:icon="@drawable/ic_login"-->
 
             <!-- Ili separator -->
             <LinearLayout
@@ -250,24 +251,24 @@
                 app:rippleColor="#F8E8EE"
                 android:textColor="#F2BED1"
                 app:iconGravity="textStart"
-            app:iconPadding="8dp"
-            app:iconTint="#F2BED1"/>
-                <!--android:icon="@drawable/ic_register"-->
+                app:iconPadding="8dp"
+                app:iconTint="#F2BED1"/>
+            <!--android:icon="@drawable/ic_register"-->
 
             <!-- Sportske aktivnosti -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="⚽ 🏀 🏐 🎾 🏸"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_marginTop="24dp"
-                android:letterSpacing="4"/>
+    <!--<TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="⚽ 🏀 🏐 🎾 🏸"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:letterSpacing="4"/> -->
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+</LinearLayout>
+</androidx.cardview.widget.CardView>
 
-    <!-- Footer s informacijama o sportskoj grupi -->
+<!-- Footer s informacijama o sportskoj grupi -->
     <TextView
         android:id="@+id/tvFooter"
         android:layout_width="wrap_content"

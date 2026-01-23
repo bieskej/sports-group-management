@@ -126,6 +126,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         EditText etTitle = dialogView.findViewById(R.id.etTitle);
         EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        EditText etCoach = dialogView.findViewById(R.id.etCoach); // ✅ trener
         EditText etDate = dialogView.findViewById(R.id.etDate);
         EditText etTime = dialogView.findViewById(R.id.etTime);
 
@@ -135,6 +136,7 @@ public class DashboardActivity extends AppCompatActivity {
         builder.setPositiveButton("Kreiraj", (dialog, which) -> {
             String title = etTitle.getText().toString().trim();
             String description = etDescription.getText().toString().trim();
+            String coach = etCoach.getText().toString().trim(); // ✅ trener
             String date = etDate.getText().toString().trim();
             String time = etTime.getText().toString().trim();
 
@@ -143,14 +145,14 @@ public class DashboardActivity extends AppCompatActivity {
                 return;
             }
 
-            createTraining(title, description, date, time);
+            createTraining(title, description, coach, date, time);
         });
 
         builder.setNegativeButton("Odustani", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
-    private void createTraining(String title, String description, String date, String time) {
+    private void createTraining(String title, String description, String coach, String date, String time) {
         setLoading(true);
         String userId = authManager.getUserId();
 
@@ -158,6 +160,13 @@ public class DashboardActivity extends AppCompatActivity {
         String timeForDb = (time.length() == 5) ? (time + ":00") : time;
 
         Training training = new Training(date, timeForDb, userId, title, description);
+
+        // ✅ ako Training model ima setCoach(), spremit će coach u JSON
+        try {
+            training.setCoach(coach);
+        } catch (Exception ignored) {
+            // ako trenutno nema coach u modelu, neće crashati, ali neće ni spremiti
+        }
 
         RetrofitClient.getInstance(this).getApi().createTraining(training).enqueue(new ApiCallback<List<Training>>() {
             @Override
@@ -185,6 +194,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         EditText etTitle = dialogView.findViewById(R.id.etTitle);
         EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        EditText etCoach = dialogView.findViewById(R.id.etCoach); // ✅ trener
         EditText etDate = dialogView.findViewById(R.id.etDate);
         EditText etTime = dialogView.findViewById(R.id.etTime);
 
@@ -192,6 +202,13 @@ public class DashboardActivity extends AppCompatActivity {
         etTitle.setText(training.getTitle());
         etDescription.setText(training.getDescription());
         etDate.setText(training.getTrainingDate());
+
+        // Prefill coach ako postoji getter
+        try {
+            if (training.getCoach() != null) etCoach.setText(training.getCoach());
+        } catch (Exception ignored) {
+            // ako trenutno nema coach u modelu, samo preskoči
+        }
 
         // Ako je u bazi "HH:mm:ss", prikaži "HH:mm"
         String t = training.getTrainingTime();
@@ -208,6 +225,7 @@ public class DashboardActivity extends AppCompatActivity {
         builder.setPositiveButton("Spremi", (dialog, which) -> {
             String newTitle = etTitle.getText().toString().trim();
             String newDescription = etDescription.getText().toString().trim();
+            String newCoach = etCoach.getText().toString().trim(); // ✅ trener
             String newDate = etDate.getText().toString().trim();
             String newTime = etTime.getText().toString().trim();
 
@@ -216,21 +234,21 @@ public class DashboardActivity extends AppCompatActivity {
                 return;
             }
 
-            updateTraining(training, newTitle, newDescription, newDate, newTime);
+            updateTraining(training, newTitle, newDescription, newCoach, newDate, newTime);
         });
 
         builder.setNegativeButton("Odustani", (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
-    private void updateTraining(Training training, String title, String description, String date, String time) {
+    private void updateTraining(Training training, String title, String description, String coach, String date, String time) {
         setLoading(true);
 
         String idQuery = "eq." + training.getId();
-
         String timeForDb = (time.length() == 5) ? (time + ":00") : time;
 
-        TrainingUpdateRequest request = new TrainingUpdateRequest(date, timeForDb, title, description);
+        // ✅ request sada šalje i coach
+        TrainingUpdateRequest request = new TrainingUpdateRequest(date, timeForDb, title, description, coach);
 
         Call<List<Training>> call = RetrofitClient.getInstance(this).getApi().updateTraining(idQuery, request);
 

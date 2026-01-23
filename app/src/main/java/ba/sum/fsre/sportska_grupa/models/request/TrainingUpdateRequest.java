@@ -16,10 +16,14 @@ public class TrainingUpdateRequest {
     @SerializedName("description")
     private String description;
 
-    public TrainingUpdateRequest(String trainingDate, String trainingTime, String title, String description) {
+    @SerializedName("coach")
+    private String coach;
+
+    public TrainingUpdateRequest(String trainingDate, String trainingTime, String title, String description, String coach) {
         this.trainingDate = trainingDate;
         this.trainingTime = trainingTime;
         this.title = title;
         this.description = description;
+        this.coach = coach;
     }
 }
