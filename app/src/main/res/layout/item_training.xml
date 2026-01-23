@@ -7,17 +7,21 @@
     android:layout_marginBottom="12dp"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="16dp"
     app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
     app:cardBackgroundColor="#FFFFFF">
 
+    <!-- Child nije clickable, da klik ide na itemView -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground">
 
-        <!-- Header -->
+        <!-- TOP ROW: logo + title + actions -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,62 +30,31 @@
             android:padding="16dp"
             android:paddingBottom="12dp">
 
-            <!-- Ikona -->
-            <TextView
+            <!-- LOGO (umjesto 💪) -->
+            <ImageView
+                android:id="@+id/ivTrainingLogo"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:background="@drawable/bg_training_icon"
-                android:gravity="center"
-                android:text="💪"
-                android:textSize="28sp"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="16dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo2"
+                android:contentDescription="@string/team_logo" />
 
-            <!-- Info -->
-            <LinearLayout
+            <!-- TITLE (u istoj razini s edit/delete) -->
+            <TextView
+                android:id="@+id/trainingTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:text="Training Title"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#1F2937"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
-                <TextView
-                    android:id="@+id/trainingTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Training Title"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#1F2937"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="4dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📅"
-                        android:textSize="12sp"
-                        android:layout_marginEnd="4dp"/>
-
-                    <TextView
-                        android:id="@+id/trainingDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2026-01-15"
-                        android:textColor="#6B7280"
-                        android:textSize="13sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Action buttons -->
+            <!-- Action buttons (ostaju isti) -->
             <ImageButton
                 android:id="@+id/btnEdit"
                 android:layout_width="40dp"
@@ -90,6 +63,8 @@
                 android:background="@drawable/bg_edit_button"
                 android:padding="8dp"
                 android:contentDescription="Uredi"
+                android:clickable="true"
+                android:focusable="true"
                 app:tint="#F2BED1"/>
 
             <ImageButton
@@ -101,6 +76,8 @@
                 android:background="@drawable/bg_delete_button"
                 android:padding="8dp"
                 android:contentDescription="Obriši"
+                android:clickable="true"
+                android:focusable="true"
                 app:tint="#EF4444"/>
 
         </LinearLayout>
@@ -113,7 +90,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"/>
 
-        <!-- Description -->
+        <!-- DETAILS: opis + datum + vrijeme + trener -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -121,6 +98,7 @@
             android:padding="16dp"
             android:paddingTop="12dp">
 
+            <!-- OPIS -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,7 +120,82 @@
                 android:maxLines="3"
                 android:ellipsize="end" />
 
-            <!-- Footer hint -->
+            <!-- DATUM -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📅"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/trainingDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2026-01-15"
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- VRIJEME -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏰"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/trainingTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="18:00"
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- TRENER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🧑‍🏫"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/trainingCoach"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trener: -"
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Hint -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -172,89 +225,3 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
-<!--
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
-    app:cardUseCompatPadding="true">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@android:color/white">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/trainingTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Training Title"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#111827"
-                android:maxLines="1"
-                android:ellipsize="end" />
-
-
-            <ImageButton
-                android:id="@+id/btnEdit"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:drawable/ic_menu_edit"
-                android:background="@drawable/icon_button_bg"
-                android:padding="8dp"
-                android:contentDescription="Edit"
-                android:clickable="true"
-                android:focusable="true" />
-
-
-            <ImageButton
-                android:id="@+id/btnDelete"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:src="@android:drawable/ic_menu_delete"
-                android:background="@drawable/icon_button_bg"
-                android:padding="8dp"
-                android:contentDescription="Delete"
-                android:clickable="true"
-                android:focusable="true" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/trainingDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Datum: 2026-01-15"
-            android:layout_marginTop="8dp"
-            android:textColor="#6B7280"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/trainingDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Opis treninga..."
-            android:layout_marginTop="10dp"
-            android:textColor="#374151"
-            android:textSize="14sp"
-            android:maxLines="3"
-            android:ellipsize="end" />
-
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
--->

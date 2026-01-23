@@ -31,6 +31,15 @@
         android:minLines="2"
         android:layout_marginTop="8dp" />
 
+    <!-- TRENER -->
+    <EditText
+        android:id="@+id/etCoach"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Trener"
+        android:inputType="textCapWords"
+        android:layout_marginTop="8dp" />
+
     <!-- DATUM -->
     <EditText
         android:id="@+id/etDate"

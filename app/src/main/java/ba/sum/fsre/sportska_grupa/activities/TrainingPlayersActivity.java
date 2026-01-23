@@ -56,13 +56,24 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     }
 
     private void initViews(String trainingTitle) {
+
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        // OVO JE FALILO: postavi toolbar kao ActionBar
         setSupportActionBar(toolbar);
 
+        // Uključi strelicu nazad
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Prisutnost"); // ili prazno "" ako želiš bez teksta
         }
 
+        // Bijela strelica (ako je rozi toolbar)
+        if (toolbar.getNavigationIcon() != null) {
+            toolbar.getNavigationIcon().setTint(android.graphics.Color.WHITE);
+        }
+
+        // Klik na strelicu
         toolbar.setNavigationOnClickListener(v -> finish());
 
         tvTitle = findViewById(R.id.tvTrainingTitle);
@@ -75,6 +86,7 @@ public class TrainingPlayersActivity extends AppCompatActivity {
             tvTitle.setText("Moja prisutnost – " + trainingTitle);
         }
     }
+
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -255,4 +267,5 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     private void setLoading(boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
+
 }
