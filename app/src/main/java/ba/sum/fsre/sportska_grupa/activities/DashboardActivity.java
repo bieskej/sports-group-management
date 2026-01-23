@@ -37,6 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TrainingAdapter adapter;
     private FloatingActionButton fabAddTraining;
+    private FloatingActionButton fabStats;
     private ProgressBar progressBar;
     private Toolbar toolbar;
     private AuthManager authManager;
@@ -58,6 +59,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void initViews() {
         recyclerView = findViewById(R.id.recyclerView);
         fabAddTraining = findViewById(R.id.fabAddTraining);
+        fabStats = findViewById(R.id.fabStats);
         progressBar = findViewById(R.id.dashboardProgressBar);
         toolbar = findViewById(R.id.toolbar);
 
@@ -77,6 +79,10 @@ public class DashboardActivity extends AppCompatActivity {
     private void applyRolePermissions() {
         if (!authManager.isTrainer()) {
             fabAddTraining.setVisibility(View.GONE);
+            fabStats.setVisibility(View.VISIBLE);
+        } else {
+            fabAddTraining.setVisibility(View.VISIBLE);
+            fabStats.setVisibility(View.GONE);
         }
     }
 
@@ -95,6 +101,11 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void setupListeners() {
         fabAddTraining.setOnClickListener(v -> showCreateTrainingDialog());
+        fabStats.setOnClickListener(v -> {
+            Intent intent = new Intent(this, StatisticsActivity.class);
+            // NE šalji playerId i trainingId - statistika će koristiti trenutnog korisnika
+            startActivity(intent);
+        });
     }
 
     private void loadTrainings() {

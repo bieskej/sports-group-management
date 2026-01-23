@@ -80,4 +80,10 @@ public interface SupabaseAPI {
             @Query("id") String idFilter,
             @Body AttendanceRequest request
     );
+
+    // Dohvati sve zapise prisutnosti za određenog igrača
+    @GET("rest/v1/attendance")
+    Call<List<Attendance>> getPlayerAttendance(
+            @Query("player_id") String playerIdFilter
+    );
 }
