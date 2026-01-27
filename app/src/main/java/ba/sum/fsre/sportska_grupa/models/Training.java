@@ -1,4 +1,3 @@
-// Training.java
 package ba.sum.fsre.sportska_grupa.models;
 
 import com.google.gson.annotations.SerializedName;
@@ -14,8 +13,10 @@ public class Training {
     @SerializedName("training_time")
     private String trainingTime;
 
-    @SerializedName("user_id")
-    private String userId;
+    // ⛔ user_id MIČEMO
+    // ✅ koristimo created_by (kako je u bazi + RLS policy)
+    @SerializedName("created_by")
+    private String createdBy;
 
     @SerializedName("title")
     private String title;
@@ -26,23 +27,25 @@ public class Training {
     @SerializedName("coach")
     private String coach;
 
-    // Prazan konstruktor (korisno za Gson/Retrofit)
+    // Prazan konstruktor (Gson)
     public Training() {}
 
-    // Konstruktor za CREATE (ako hoćeš i coach odmah slati, koristi ovaj ispod)
-    public Training(String trainingDate, String trainingTime, String userId, String title, String description) {
+    // Konstruktor za CREATE
+    public Training(String trainingDate, String trainingTime, String createdBy,
+                    String title, String description) {
         this.trainingDate = trainingDate;
         this.trainingTime = trainingTime;
-        this.userId = userId;
+        this.createdBy = createdBy;
         this.title = title;
         this.description = description;
     }
 
-    // Konstruktor za CREATE + coach (preporučeno ako unosiš trenera)
-    public Training(String trainingDate, String trainingTime, String userId, String title, String description, String coach) {
+    // Konstruktor za CREATE + coach
+    public Training(String trainingDate, String trainingTime, String createdBy,
+                    String title, String description, String coach) {
         this.trainingDate = trainingDate;
         this.trainingTime = trainingTime;
-        this.userId = userId;
+        this.createdBy = createdBy;
         this.title = title;
         this.description = description;
         this.coach = coach;
@@ -61,8 +64,8 @@ public class Training {
         return trainingTime;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
     public String getTitle() {
@@ -78,6 +81,10 @@ public class Training {
     }
 
     // SETTERI
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public void setCoach(String coach) {
         this.coach = coach;
     }
@@ -88,10 +95,6 @@ public class Training {
 
     public void setTrainingTime(String trainingTime) {
         this.trainingTime = trainingTime;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public void setTitle(String title) {
