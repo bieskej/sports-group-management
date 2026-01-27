@@ -137,7 +137,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <!-- FAB -->
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddTraining"
             android:layout_width="wrap_content"

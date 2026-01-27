@@ -165,35 +165,32 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void createTraining(String title, String description, String coach, String date, String time) {
         setLoading(true);
+
         String userId = authManager.getUserId();
 
-        // "HH:mm" -> "HH:mm:00" (sigurno za Postgres time)
         String timeForDb = (time.length() == 5) ? (time + ":00") : time;
 
         Training training = new Training(date, timeForDb, userId, title, description);
 
-        // ✅ ako Training model ima setCoach(), spremit će coach u JSON
-        try {
-            training.setCoach(coach);
-        } catch (Exception ignored) {
-            // ako trenutno nema coach u modelu, neće crashati, ali neće ni spremiti
-        }
+        training.setCoach(coach);
 
-        RetrofitClient.getInstance(this).getApi().createTraining(training).enqueue(new ApiCallback<List<Training>>() {
-            @Override
-            public void onSuccess(List<Training> result) {
-                setLoading(false);
-                Toast.makeText(DashboardActivity.this, "Trening kreiran!", Toast.LENGTH_SHORT).show();
-                loadTrainings();
-            }
+        RetrofitClient.getInstance(this).getApi().createTraining(training)
+                .enqueue(new ApiCallback<List<Training>>() {
+                    @Override
+                    public void onSuccess(List<Training> result) {
+                        setLoading(false);
+                        Toast.makeText(DashboardActivity.this, "Trening kreiran!", Toast.LENGTH_SHORT).show();
+                        loadTrainings();
+                    }
 
-            @Override
-            public void onError(String errorMessage) {
-                setLoading(false);
-                handleApiError(errorMessage);
-            }
-        });
+                    @Override
+                    public void onError(String errorMessage) {
+                        setLoading(false);
+                        handleApiError(errorMessage);
+                    }
+                });
     }
+
 
     private void showEditTrainingDialog(Training training) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -258,7 +255,7 @@ public class DashboardActivity extends AppCompatActivity {
         String idQuery = "eq." + training.getId();
         String timeForDb = (time.length() == 5) ? (time + ":00") : time;
 
-        // ✅ request sada šalje i coach
+        //  request sada šalje i coach
         TrainingUpdateRequest request = new TrainingUpdateRequest(date, timeForDb, title, description, coach);
 
         Call<List<Training>> call = RetrofitClient.getInstance(this).getApi().updateTraining(idQuery, request);
