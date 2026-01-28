@@ -1,18 +1,18 @@
 package ba.sum.fsre.sportska_grupa.models.request;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterRequest extends BaseRequest{
     private String email;
     private String password;
-    private String username;
+    private Map<String, Object> data;
 
     public RegisterRequest(String email, String password, String username) {
         this.email = email;
         this.password = password;
-        this.username = username;
-    }
+        this.data = new HashMap<>();
+        this.data.put("username", username);
 
-    // Getteri
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public String getUsername() { return username; }
+    }
 }
