@@ -5,6 +5,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -45,6 +47,8 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Enable Edge-to-Edge
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_dashboard);
 
         authManager = new AuthManager(this);
@@ -54,7 +58,37 @@ public class DashboardActivity extends AppCompatActivity {
         setupRecyclerView();
         setupListeners();
         loadTrainings();
+
+        // Handle WindowInsets for edge-to-edge experience
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainCoordinatorLayout), (v, insets) -> {
+            androidx.core.graphics.Insets systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+
+            // 1. Status Bar adjustment (Back arrow)
+            // Increase top padding of the AppBarLayout or Toolbar so the arrow isn't visible under the status bar
+            // We find the parent AppBarLayout if possible, or just apply to Toolbar
+            View appBar = findViewById(R.id.toolbar).getParent() instanceof View ? (View) findViewById(R.id.toolbar).getParent() : findViewById(R.id.toolbar);
+            appBar.setPadding(appBar.getPaddingLeft(), systemBars.top, appBar.getPaddingRight(), appBar.getPaddingBottom());
+
+            // 2. Navigation Bar adjustment (FAB)
+            // Adjust margins for FABs to avoid overlap with navigation bar
+            adjustFabMargin(fabAddTraining, systemBars.bottom);
+            adjustFabMargin(fabStats, systemBars.bottom);
+
+            return insets;
+        });
     }
+
+    private void adjustFabMargin(View fab, int bottomInset) {
+        if (fab == null) return;
+        android.view.ViewGroup.MarginLayoutParams params = (android.view.ViewGroup.MarginLayoutParams) fab.getLayoutParams();
+        params.bottomMargin = bottomInset + dpToPx(18); // 18dp is original margin
+        fab.setLayoutParams(params);
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density);
+    }
+
 
     private void initViews() {
         recyclerView = findViewById(R.id.recyclerView);
@@ -70,10 +104,92 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         toolbar.setNavigationOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            // Logout when back button is pressed
+            showLogoutDialog();
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_logout) {
+            showLogoutDialog();
+            return true;
+        } else if (id == R.id.action_delete_account) {
+            showDeleteAccountDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Odjava")
+                .setMessage("Jeste li sigurni da se želite odjaviti?")
+                .setPositiveButton("Odjavi se", (dialog, which) -> {
+                    authManager.logout();
+                    Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Odustani", null)
+                .show();
+    }
+
+    private void showDeleteAccountDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("⚠️ Brisanje Računa")
+                .setMessage("PAŽNJA: Ova akcija je trajna i ne može se poništiti!\n\nBrisanjem računa:\n• Izgubiti ćete sve svoje podatke\n• Sve vaše prisutnosti će biti obrisane\n• Nećete moći ponovno koristiti ovaj račun\n\nJeste li apsolutno sigurni?")
+                .setPositiveButton("DA, OBRIŠI RAČUN", (dialog, which) -> {
+                    // Druga potvrda za dodatnu sigurnost
+                    new AlertDialog.Builder(this)
+                            .setTitle("Konačna Potvrda")
+                            .setMessage("Ovo je vaša posljednja prilika da promijenite mišljenje. Jeste li 100% sigurni da želite obrisati račun?")
+                            .setPositiveButton("DA, SIGURAN SAM", (d, w) -> deleteAccount())
+                            .setNegativeButton("NE, ODUSTANI", null)
+                            .show();
+                })
+                .setNegativeButton("Odustani", null)
+                .show();
+    }
+
+    private void deleteAccount() {
+        setLoading(true);
+
+        RetrofitClient.getInstance(this)
+                .getApi()
+                .deleteUser()
+                .enqueue(new retrofit2.Callback<Void>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
+                        setLoading(false);
+                        if (response.isSuccessful()) {
+                            Toast.makeText(DashboardActivity.this, "Račun uspješno obrisan", Toast.LENGTH_LONG).show();
+                            authManager.logout();
+                            Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(DashboardActivity.this, "Greška pri brisanju računa: " + response.code(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<Void> call, Throwable t) {
+                        setLoading(false);
+                        Toast.makeText(DashboardActivity.this, "Greška mreže: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void applyRolePermissions() {
