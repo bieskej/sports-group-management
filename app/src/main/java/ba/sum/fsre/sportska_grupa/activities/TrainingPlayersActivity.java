@@ -36,6 +36,7 @@ public class TrainingPlayersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_training_players);
 
         authManager = new AuthManager(this);
@@ -51,6 +52,14 @@ public class TrainingPlayersActivity extends AppCompatActivity {
         }
 
         initViews(trainingTitle);
+
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.playersCoordinatorLayout), (v, insets) -> {
+            androidx.core.graphics.Insets systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+            View appBar = findViewById(R.id.toolbar).getParent() instanceof View ? (View) findViewById(R.id.toolbar).getParent() : findViewById(R.id.toolbar);
+            appBar.setPadding(appBar.getPaddingLeft(), systemBars.top, appBar.getPaddingRight(), appBar.getPaddingBottom());
+            return insets;
+        });
+
         setupRecyclerView();
         loadPlayers();
     }

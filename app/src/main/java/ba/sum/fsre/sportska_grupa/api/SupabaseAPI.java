@@ -86,4 +86,9 @@ public interface SupabaseAPI {
     Call<List<Attendance>> getPlayerAttendance(
             @Query("player_id") String playerIdFilter
     );
+
+    // Obriši korisnika pomoću RPC funkcije (briše iz auth + profiles + attendance)
+    @Headers("Content-Type: application/json")
+    @POST("rest/v1/rpc/delete_user")
+    Call<Void> deleteUser();
 }

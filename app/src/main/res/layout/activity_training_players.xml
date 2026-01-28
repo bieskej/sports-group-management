@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playersCoordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F9F5F6">
@@ -78,6 +79,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="16dp"
+            android:paddingBottom="96dp"
             android:clipToPadding="false"
             app:layout_constraintTop_toBottomOf="@id/cardTrainingTitle"
             app:layout_constraintBottom_toBottomOf="parent"
