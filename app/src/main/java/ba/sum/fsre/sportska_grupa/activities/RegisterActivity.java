@@ -1,13 +1,17 @@
 package ba.sum.fsre.sportska_grupa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ba.sum.fsre.sportska_grupa.R;
@@ -24,6 +28,9 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private AuthManager authManager;
 
+    private CheckBox cbAcceptPolicy;
+    private TextView tvPrivacyPolicy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         authManager = new AuthManager(this);
 
         initViews();
+        setupPrivacyPolicy();
         setupListeners();
     }
 
@@ -40,20 +48,49 @@ public class RegisterActivity extends AppCompatActivity {
         emailInput = findViewById(R.id.emailTxt);
         passwordInput = findViewById(R.id.passwordTxt);
         confirmPasswordInput = findViewById(R.id.passwordCnfTxt);
+
         registerBtn = findViewById(R.id.registerBtn);
         backToLoginBtn = findViewById(R.id.backToLoginBtn);
         progressBar = findViewById(R.id.registerProgressBar);
+
+        cbAcceptPolicy = findViewById(R.id.cbAcceptPolicy);
+        tvPrivacyPolicy = findViewById(R.id.tvPrivacyPolicy);
+
+        // gumb je klikabilan, ali vizualno "disabled"
+        registerBtn.setEnabled(true);
+        registerBtn.setAlpha(0.5f);
+    }
+
+    private void setupPrivacyPolicy() {
+
+        // klik na Privacy Policy → GitHub
+        tvPrivacyPolicy.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(
+                    "https://matijevicmila.github.io/SportGroup-policies/privacy-policy"
+            ));
+            startActivity(intent);
+        });
+
+        // checkbox upravlja izgledom gumba
+        cbAcceptPolicy.setOnCheckedChangeListener((cbView, isChecked) -> {
+            registerBtn.setAlpha(isChecked ? 1f : 0.5f);
+        });
     }
 
     private void setupListeners() {
         registerBtn.setOnClickListener(v -> registerUser());
-
-        backToLoginBtn.setOnClickListener(v -> {
-            finish();
-        });
+        backToLoginBtn.setOnClickListener(v -> finish());
     }
 
     private void registerUser() {
+        if (!cbAcceptPolicy.isChecked()) {
+            Toast.makeText(this,
+                    "Morate prihvatiti pravila privatnosti",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String username = usernameInput.getText().toString().trim();
         String email = emailInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
@@ -80,61 +117,32 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onError(String errorMessage) {
                         setLoading(false);
-                        Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this,
+                                errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private boolean validateInput(String username, String email, String password, String confirmPassword) {
-        // Validacija username-a
-        if (username.isEmpty()) {
-            usernameInput.setError("Unesite korisničko ime");
-            usernameInput.requestFocus();
-            return false;
-        }
+    private boolean validateInput(String username, String email,
+                                  String password, String confirmPassword) {
 
-        if (username.length() < 3) {
+        if (username.isEmpty() || username.length() < 3) {
             usernameInput.setError("Korisničko ime mora imati najmanje 3 znaka");
-            usernameInput.requestFocus();
             return false;
         }
 
-        // Validacija email-a
-        if (email.isEmpty()) {
-            emailInput.setError("Unesite email");
-            emailInput.requestFocus();
-            return false;
-        }
-
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailInput.setError("Unesite ispravan email");
-            emailInput.requestFocus();
             return false;
         }
 
-        // Validacija lozinke
-        if (password.isEmpty()) {
-            passwordInput.setError("Unesite lozinku");
-            passwordInput.requestFocus();
-            return false;
-        }
-
-        if (password.length() < 6) {
+        if (password.isEmpty() || password.length() < 6) {
             passwordInput.setError("Lozinka mora imati najmanje 6 znakova");
-            passwordInput.requestFocus();
-            return false;
-        }
-
-        // Validacija potvrde lozinke
-        if (confirmPassword.isEmpty()) {
-            confirmPasswordInput.setError("Potvrdite lozinku");
-            confirmPasswordInput.requestFocus();
             return false;
         }
 
         if (!password.equals(confirmPassword)) {
             confirmPasswordInput.setError("Lozinke se ne podudaraju");
-            confirmPasswordInput.requestFocus();
             return false;
         }
 
@@ -156,9 +164,5 @@ public class RegisterActivity extends AppCompatActivity {
     private void setLoading(boolean isLoading) {
         progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         registerBtn.setEnabled(!isLoading);
-        usernameInput.setEnabled(!isLoading);
-        emailInput.setEnabled(!isLoading);
-        passwordInput.setEnabled(!isLoading);
-        confirmPasswordInput.setEnabled(!isLoading);
     }
 }
