@@ -1,5 +1,6 @@
 package ba.sum.fsre.sportska_grupa.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -111,7 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResponse response) {
                         setLoading(false);
-                        handleRegisterSuccess(response);
+                        handleRegisterSuccess(response, email);
                     }
 
                     @Override
@@ -149,16 +150,28 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private void handleRegisterSuccess(AuthResponse response) {
+    private void handleRegisterSuccess(AuthResponse response, String email) {
         authManager.saveToken(response.getAccessToken());
         authManager.saveEmail(response.getUser().getEmail());
 
-        Toast.makeText(this, "Registracija uspješna!", Toast.LENGTH_SHORT).show();
+        showVerificationDialog(email);
+    }
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    private void showVerificationDialog(String email) {
+        new AlertDialog.Builder(this)
+                .setTitle("Registracija Uspješna! ✅")
+                .setMessage("Verifikacijski email je poslan na:\n\n" + email +
+                        "\n\nMolimo provjerite svoju email poštu i kliknite na link za verifikaciju računa.")
+                .setIcon(android.R.drawable.ic_dialog_email)
+                .setPositiveButton("U redu", (dialog, which) -> {
+                    // Prebaci na login ekran
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void setLoading(boolean isLoading) {
