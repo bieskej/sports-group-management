@@ -81,11 +81,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onError(String errorMessage) {
                         setLoading(false);
-                        // Osnovno rukovanje greškama za pogrešan email/lozinku
                         if (errorMessage.contains("400") || errorMessage.contains("401")) {
-                            Toast.makeText(LoginActivity.this, "Neispravan email ili lozinka", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this,
+                                    "Neispravan email ili lozinka",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this,
+                                    errorMessage,
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -113,29 +116,25 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    // ✅ ISPRAVLJENA LOGIKA
     private void handleLoginSuccess(AuthResponse response) {
-        authManager.saveToken(response.getAccessToken());
-        if (response.getUser() != null) {
-            String userId = response.getUser().getId();
-            authManager.saveEmail(response.getUser().getEmail());
-            authManager.saveUserId(response.getUser().getId());
-
-            fetchUserRole(userId);
+        if (response == null || response.getAccessToken() == null) {
+            Toast.makeText(this, "Greška pri prijavi", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        Toast.makeText(this, "Prijava uspješna!", Toast.LENGTH_SHORT).show();
+        authManager.saveToken(response.getAccessToken());
 
-        Intent intent = new Intent(this, DashboardActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
+        if (response.getUser() != null) {
+            String userId = response.getUser().getId();
+            authManager.saveUserId(userId);
+            authManager.saveEmail(response.getUser().getEmail());
 
-    private void setLoading(boolean isLoading) {
-        progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        loginBtn.setEnabled(!isLoading);
-        emailInput.setEnabled(!isLoading);
-        passwordInput.setEnabled(!isLoading);
+            // ✅ TEK NAKON ROLE IDEMO NA DASHBOARD
+            fetchUserRole(userId);
+        } else {
+            Toast.makeText(this, "Greška pri prijavi", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fetchUserRole(String userId) {
@@ -145,10 +144,9 @@ public class LoginActivity extends AppCompatActivity {
                 .enqueue(new ApiCallback<List<Profile>>() {
                     @Override
                     public void onSuccess(List<Profile> profiles) {
-                        if (!profiles.isEmpty()) {
+                        if (profiles != null && !profiles.isEmpty()) {
                             authManager.saveRole(profiles.get(0).getRole());
                         }
-
                         goToDashboard();
                     }
 
@@ -162,10 +160,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToDashboard() {
+        Toast.makeText(this, "Prijava uspješna!", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, DashboardActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }
 
+    private void setLoading(boolean isLoading) {
+        progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        loginBtn.setEnabled(!isLoading);
+        emailInput.setEnabled(!isLoading);
+        passwordInput.setEnabled(!isLoading);
+    }
 }
