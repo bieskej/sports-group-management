@@ -27,17 +27,21 @@ public class RetrofitClient {
                             .header("apikey", Constants.ANON_KEY)
                             .header("Accept", "application/json");
 
-                    // Dodaj Authorization header ako postoji spremljeni token
-                    AuthManager authManager = new AuthManager(appContext);
+                    Context appContext2 = appContext;
+                    AuthManager authManager = new AuthManager(appContext2);
                     String token = authManager.getToken();
+
                     if (token != null && !token.isEmpty()) {
                         builder.header("Authorization", "Bearer " + token);
+                    } else {
+                        builder.header("Authorization", "Bearer " + Constants.ANON_KEY);
                     }
 
                     return chain.proceed(builder.build());
                 })
                 .addInterceptor(logging)
                 .build();
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

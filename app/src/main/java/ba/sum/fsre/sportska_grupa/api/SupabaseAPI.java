@@ -48,7 +48,6 @@ public interface SupabaseAPI {
     @DELETE("rest/v1/trainings")
     Call<Void> deleteTraining(@Query("id") String id);
 
-    // ✅ UPDATE TRAINING
     @Headers({"Content-Type: application/json", "Prefer: return=representation"})
     @PATCH("rest/v1/trainings")
     Call<List<Training>> updateTraining(
